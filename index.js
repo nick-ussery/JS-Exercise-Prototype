@@ -8,6 +8,9 @@
 */
 
 // EXAMPLE SOLUTION CODE:
+/**
+ * @param {any} name
+ */
 function Airplane(name) {
   this.name = name;
   this.isFlying = false;
@@ -39,10 +42,23 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
+function Person(newName, newAge) {
+  this.name =newName;
+  this.age= newAge;
+  this.stomach= [];
+  }
 
-}
+  Person.prototype.eat = function(food) {
+    if(this.stomach.length < 10){
+        this.stomach.push(food);
+    }
+  };
 
+  Person.prototype.poop = function(){ this.stomach=[]};
+
+  Person.prototype.toString = function(){
+    return `${this.name}, ${this.age}`;
+  }
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -57,8 +73,31 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank =0;
+  this.odometer = 0;
+}
+Car.prototype.fill = function(gallonsOfGas){
+  this.tank += gallonsOfGas;
+}
 
+Car.prototype.drive = function(distance){
+  let allowedDistance = this.tank * this.milesPerGallon;
+  let gasUsed = distance / this.milesPerGallon;
+  if(gasUsed < this.tank){
+    this.odometer += distance;
+    this.tank = this.tank - gasUsed;
+  }else if(gasUsed == this.tank){
+    this.odometer += distance;
+    this.tank = 0;
+    return "I ran out of fuel at " + this.odometer + " miles!";
+  } else if(gasUsed > this.tank){
+      this.odometer += allowedDistance;
+      this.tank = 0;
+      return  `I ran out of fuel at ${this.odometer} miles!`
+  }
 }
 
 /*
@@ -68,18 +107,25 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.bind(name, age);
+  this.name = name;
+  this.age = age;
+  this.favoriteToy= favoriteToy;
+}
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function (){
+  return `Playing with ${this.favoriteToy}`
 }
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. global context: the window itself is what this refers to since this refers to the parent of the current function. so global functions when using this refer to windwo
+  2. new binding: in an object lets you create new objects and use the current called object as the reference for this. allows you to save on variable creation and use objects as molds for multiple objects of same kind
+  3. implicit: methods of an object will use this to imply the object and its attributes
+  4. explicit: when you call or otherwise use an objects methods and are binding objects together the this keyword is now being explicit as it is being explicitly defined to mean the called or bound method's object now
 */
 
 
